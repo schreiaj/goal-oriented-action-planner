@@ -56,6 +56,10 @@ describe("Solver", () => {
         value: false
       },
       {
+          name: "Is at Scale",
+          value: true
+      },
+      {
         name: "Has Cube",
         value: true
       }
@@ -64,11 +68,55 @@ describe("Solver", () => {
     });
     let actions = [
       {
+        name: "Drive to HP",
+        preconditions: [
+          {
+            name: "Is at HP",
+            value: false
+          }
+        ],
+        results: [
+          {
+            name: "Is at HP",
+            value: true
+          },
+          {
+              name: "Is at Scale",
+              value: false
+          }
+        ],
+        cost: 2
+      },
+      {
+        name: "Drive to Scale",
+        preconditions: [
+          {
+            name: "Is at Scale",
+            value: false
+          }
+        ],
+        results: [
+          {
+            name: "Is at HP",
+            value: false
+          },
+          {
+              name: "Is at Scale",
+              value: true
+          }
+        ],
+        cost: 2
+      },
+      {
         name: "Score on Blue Scale",
         preconditions: [
           {
             name: "Has Cube",
             value: true
+          }, 
+          {
+              name: "Is at Scale",
+              value: true
           }
         ],
         results: [
@@ -89,6 +137,10 @@ describe("Solver", () => {
           {
             name: "Has Cube",
             value: false
+          },
+          {
+              name: "Is at HP",
+              value: true
           }
         ],
         results: [
@@ -97,7 +149,7 @@ describe("Solver", () => {
             value: true
           }
         ],
-        cost: 5
+        cost: 3
       },
       {
         name: "Get Cube From Pile",
@@ -113,7 +165,7 @@ describe("Solver", () => {
             value: true
           }
         ],
-        cost: 3
+        cost: 9
       }
     ].map(
       a =>
@@ -124,13 +176,23 @@ describe("Solver", () => {
           a.results.map(c => new Condition(c.name, c.value))
         )
     );
-    let steps = Solver(worldState, actions, goalState, 25, 10) || []
-    expect(steps.length).toBe(3)
-    let currentWorld = worldState
-    for(const step of steps){
-        expect(step.isValid(currentWorld)).toBe(true)
-        currentWorld = updateWorld(currentWorld, step.results)
+    let steps = Solver(worldState, actions, goalState, 40, 40) || [];
+    // Should result in the following actions
+    // [
+    //     'Drive to HP',
+    //     'Get Cube From HP',
+    //     'Drive to Scale',
+    //     'Score on Blue Scale',
+    //     'Drive to HP',
+    //     'Get Cube From HP',
+    //     'Drive to Scale'
+    //   ]
+    // console.log(steps.map(s => s.name))
+    expect(steps.length).toBe(7);
+    let currentWorld = worldState;
+    for (const step of steps) {
+      expect(step.isValid(currentWorld)).toBe(true);
+      currentWorld = updateWorld(currentWorld, step.results);
     }
-    
   });
 });
