@@ -39,4 +39,10 @@ describe("World", () => {
     const world = { attr: true, attr2: true };
     expect(isGoalMet(world, goal)).toBe(false)
   });
+  it("should allow referential updates", () => {
+    const world: World = { attr: 1 };
+    const cond = new Condition("attr", "attr + 5");
+    const newWorld = updateWorld(world, [cond]);
+    expect(newWorld["attr"]).toBe(6)
+  })
 });
