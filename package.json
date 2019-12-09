@@ -1,7 +1,7 @@
 {
   "name": "ts-goap",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple typescript goal oriented action planner",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "keywords": [],
   "author": "schreiaj@gmail.com",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "jest": "^24.9.0",
